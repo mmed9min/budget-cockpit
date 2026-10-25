@@ -6,10 +6,16 @@ service BudgetCockpitService {
 
   @readonly
   @restrict: [
-    { grant: 'READ', to: 'BudgetController' },
-    { grant: 'READ', to: 'CostCenterOwner', where: 'responsibleUser = $user' }
+    { grant: ['READ', 'validate'], to: 'BudgetController' },
+    { grant: ['READ', 'justify'],  to: 'CostCenterOwner', where: 'responsibleUser = $user' }
   ]
-  entity Budgets as projection on db.Budgets;
+  entity Budgets as projection on db.Budgets actions {
+    @Core.OperationAvailable: in.canJustify
+    action justify(text : String(1000)) returns Budgets;
+
+    @Core.OperationAvailable: in.canValidate
+    action validate() returns Budgets;
+  };
 
   @readonly
   @restrict: [{ grant: 'READ', to: ['BudgetController', 'CostCenterOwner'] }]

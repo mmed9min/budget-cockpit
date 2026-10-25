@@ -38,3 +38,48 @@ Content-Type: application/json
 GET {{server}}/odata/v4/budget-cockpit/Budgets?$select=costCenterName,actualAmount,consumption,alertText
 Authorization: Basic controller:
 
+
+
+
+
+
+
+
+@marketing = 6f1a2b3c-0001-4000-8000-000000000001
+@it        = 6f1a2b3c-0004-4000-8000-000000000004
+
+### 1. Camille justifies Marketing (overrun) → 200, status J
+POST {{server}}/odata/v4/budget-cockpit/Budgets({{marketing}})/BudgetCockpitService.justify
+Authorization: Basic camille:
+Content-Type: application/json
+
+{ "text": "Unplanned trade fair in Lyon, approved by the sales director" }
+
+### 2. Lucas tries to justify Marketing (not his) → refused
+POST {{server}}/odata/v4/budget-cockpit/Budgets({{marketing}})/BudgetCockpitService.justify
+Authorization: Basic lucas:
+Content-Type: application/json
+
+{ "text": "test" }
+
+### 3. Camille tries to justify IT (within budget) → 400
+POST {{server}}/odata/v4/budget-cockpit/Budgets({{it}})/BudgetCockpitService.justify
+Authorization: Basic camille:
+Content-Type: application/json
+
+{ "text": "test" }
+
+### 4. Camille tries to validate → 403 (controller only)
+POST {{server}}/odata/v4/budget-cockpit/Budgets({{marketing}})/BudgetCockpitService.validate
+Authorization: Basic camille:
+Content-Type: application/json
+
+{}
+
+### 5. Controller validates Marketing → 200, status V
+POST {{server}}/odata/v4/budget-cockpit/Budgets({{marketing}})/BudgetCockpitService.validate
+Authorization: Basic controller:
+Content-Type: application/json
+
+{}
+

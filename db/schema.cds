@@ -75,6 +75,13 @@ entity Budgets : cuid, managed {
     else 'Normal'
   end;
 
+  // is true only if the budget is in alert (threshold reached or overrun) and still Open
+  canJustify  : Boolean = (actualAmount * 100 >= budgetAmount * alertThreshold)
+                          and reviewStatus.code = 'O';
+
+  //is true only if the budget is Justified                      
+  canValidate : Boolean = reviewStatus.code = 'J';
+
   // Navigation to the replicated S/4HANA line items
   items : Association to many Actuals
         on  items.companyCode = companyCode

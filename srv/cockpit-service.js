@@ -68,6 +68,37 @@ module.exports = class BudgetCockpitService extends cds.ApplicationService {
       req.info(`${budgets.length} budgets updated from ${actuals.length} S/4HANA records`)
       return { budgets: budgets.length, actuals: actuals.length }
     })
+        // --- Owner justifies an overrun or a reached threshold ---
+    this.on('justify', 'Budgets', async req => {
+      const { ID } = req.params[0]
+      const budget = await SELECT.one.from(Budgets, ID)
+        .columns('ID', 'alertLevel', 'reviewStatus_code')
+      if (!budget) return req.error(404, 'Budget not found')
+      if (budget.alertLevel === 3) {
+        return req.error(400, 'This cost center is within budget, no justification is needed')
+      }
+      if (budget.reviewStatus_code !== 'O') {
+        return req.error(409, 'This budget has already been justified')
+      }
+      const text = req.data.text?.trim()
+      if (!text) return req.error(400, 'Enter a justification')
+
+      await UPDATE(Budgets, ID).with({ justification: text, reviewStatus_code: 'J' })
+      return SELECT.one.from(this.entities.Budgets, ID)
+    })
+
+    // --- Controller validates a justified budget ---
+    this.on('validate', 'Budgets', async req => {
+      const { ID } = req.params[0]
+      const budget = await SELECT.one.from(Budgets, ID).columns('ID', 'reviewStatus_code')
+      if (!budget) return req.error(404, 'Budget not found')
+      if (budget.reviewStatus_code !== 'J') {
+        return req.error(409, 'Only justified budgets can be validated')
+      }
+
+      await UPDATE(Budgets, ID).with({ reviewStatus_code: 'V' })
+      return SELECT.one.from(this.entities.Budgets, ID)
+    })
 
     return super.init()
   }
