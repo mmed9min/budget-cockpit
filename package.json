@@ -16,5 +16,17 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^3.1.2"
+  },
+  "cds": {
+  "requires": {
+    "auth": {
+      "kind": "mocked",
+      "users": {
+        "controller": { "password": "", "roles": ["BudgetController"] },
+        "camille":    { "password": "", "roles": ["CostCenterOwner"] },
+        "lucas":      { "password": "", "roles": ["CostCenterOwner"] }
+      }
+    }
   }
+}
 }
