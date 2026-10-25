@@ -76,25 +76,23 @@ entity Budgets : cuid, managed {
   end;
 
   // Navigation to the replicated S/4HANA line items
-  items : Association to many ActualLineItems
-            on  items.companyCode = companyCode
-            and items.costCenter  = costCenter
-            and items.fiscalYear  = fiscalYear;
+  items : Association to many Actuals
+        on  items.companyCode = companyCode
+        and items.costCenter  = costCenter
+        and items.fiscalYear  = fiscalYear;
 }
 
 /**
- * Journal entry line items replicated from S/4HANA
- * (API_JOURNALENTRYITEMBASIC_SRV, leading ledger only).
+ * Actuals replicated from S/4HANA (API_JOURNALENTRYITEMBASIC_SRV),
+ * aggregated by cost center, G/L account and fiscal period, leading ledger only.
  */
-entity ActualLineItems : cuid {
-  @title: 'Company Code'   companyCode        : String(4);
-  @title: 'Fiscal Year'    fiscalYear         : String(4);
-  @title: 'Journal Entry'  accountingDocument : String(10);
-  @title: 'Line Item'      ledgerGLLineItem   : String(6);
-  @title: 'Cost Center'    costCenter         : String(10);
-  @title: 'G/L Account'    glAccount          : String(10);
-  @title: 'Posting Date'   postingDate        : Date;
-  @title: 'Text'           itemText           : String(50);
+entity Actuals : cuid {
+  @title: 'Company Code'     companyCode   : String(4);
+  @title: 'Fiscal Year'      fiscalYear    : String(4);
+  @title: 'Fiscal Period'    fiscalPeriod  : String(3);
+  @title: 'Cost Center'      costCenter    : String(10);
+  @title: 'G/L Account'      glAccount     : String(10);
+  @title: 'G/L Account Name' glAccountName : String(30);
 
   @title: 'Amount'  @Measures.ISOCurrency: currency_code
   amount   : Decimal(15, 2);

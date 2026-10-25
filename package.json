@@ -11,6 +11,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^4",
+    "@sap-cloud-sdk/http-client": "^4.9.1",
+    "@sap-cloud-sdk/resilience": "^4.9.1",
     "@sap/cds": "^10.2.1",
     "express": "^5.3.0"
   },
@@ -18,15 +21,38 @@
     "@cap-js/sqlite": "^3.1.2"
   },
   "cds": {
-  "requires": {
-    "auth": {
-      "kind": "mocked",
-      "users": {
-        "controller": { "password": "", "roles": ["BudgetController"] },
-        "camille":    { "password": "", "roles": ["CostCenterOwner"] },
-        "lucas":      { "password": "", "roles": ["CostCenterOwner"] }
+    "requires": {
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "controller": {
+            "password": "",
+            "roles": [
+              "BudgetController"
+            ]
+          },
+          "camille": {
+            "password": "",
+            "roles": [
+              "CostCenterOwner"
+            ]
+          },
+          "lucas": {
+            "password": "",
+            "roles": [
+              "CostCenterOwner"
+            ]
+          }
+        }
+      },
+      "API_JOURNALENTRYITEMBASIC_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_JOURNALENTRYITEMBASIC_SRV"
       }
     }
+  },
+  "API_JOURNALENTRYITEMBASIC_SRV": {
+    "kind": "odata-v2",
+    "model": "srv/external/API_JOURNALENTRYITEMBASIC_SRV"
   }
-}
 }

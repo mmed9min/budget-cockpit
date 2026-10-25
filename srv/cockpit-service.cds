@@ -13,7 +13,7 @@ service BudgetCockpitService {
 
   @readonly
   @restrict: [{ grant: 'READ', to: ['BudgetController', 'CostCenterOwner'] }]
-  entity ActualLineItems as projection on db.ActualLineItems;
+  entity Actuals as projection on db.Actuals;
 
   @readonly
   entity ReviewStatuses as projection on db.ReviewStatuses;

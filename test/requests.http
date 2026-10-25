@@ -3,6 +3,9 @@
 ### Controller: should see 4 budgets
 GET {{server}}/odata/v4/budget-cockpit/Budgets
 Authorization: Basic controller:
+###
+GET {{server}}/odata/v4/api-journalentryitembasic-srv/A_JournalEntryItemBasic
+Authorization: Basic controller:
 
 ### Camille: should see Marketing and IT
 GET {{server}}/odata/v4/budget-cockpit/Budgets
@@ -11,3 +14,4 @@ Authorization: Basic camille:
 ### Lucas: should see Maintenance and Production
 GET {{server}}/odata/v4/budget-cockpit/Budgets
 Authorization: Basic lucas:
+
