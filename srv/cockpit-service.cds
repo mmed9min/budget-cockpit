@@ -17,4 +17,13 @@ service BudgetCockpitService {
 
   @readonly
   entity ReviewStatuses as projection on db.ReviewStatuses;
+
+  type SyncResult {
+    budgets : Integer;
+    actuals : Integer;
+  }
+
+  /** Replicates actuals from S/4HANA for a fiscal year */
+  @requires: 'BudgetController'
+  action syncActuals(fiscalYear : String(4)) returns SyncResult;
 }

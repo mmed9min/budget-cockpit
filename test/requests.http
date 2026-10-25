@@ -15,3 +15,26 @@ Authorization: Basic camille:
 GET {{server}}/odata/v4/budget-cockpit/Budgets
 Authorization: Basic lucas:
 
+
+
+
+
+
+### Sync actuals 2026 (controller only)
+POST {{server}}/odata/v4/budget-cockpit/syncActuals
+Authorization: Basic controller:
+Content-Type: application/json
+
+{ "fiscalYear": "2026" }
+
+### Same call as Camille: should be refused (403)
+POST {{server}}/odata/v4/budget-cockpit/syncActuals
+Authorization: Basic camille:
+Content-Type: application/json
+
+{ "fiscalYear": "2026" }
+
+### Budgets after sync
+GET {{server}}/odata/v4/budget-cockpit/Budgets?$select=costCenterName,actualAmount,consumption,alertText
+Authorization: Basic controller:
+
