@@ -1,0 +1,31 @@
+{
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.BudgetController",
+      "description": "BudgetController"
+    },
+    {
+      "name": "$XSAPPNAME.CostCenterOwner",
+      "description": "CostCenterOwner"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "BudgetController",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.BudgetController"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "CostCenterOwner",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.CostCenterOwner"
+      ],
+      "attribute-references": []
+    }
+  ]
+}
