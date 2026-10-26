@@ -1,6 +1,9 @@
 const cds = require('@sap/cds')
 
 const LEADING_LEDGER = '0L'
+// Expense accounts in SAP's standard chart of accounts (YCOA): 5xxxxxxx and 6xxxxxxx
+const EXPENSE_ACCOUNTS_FROM = '50000000'
+const EXPENSE_ACCOUNTS_TO   = '69999999'
 
 module.exports = class BudgetCockpitService extends cds.ApplicationService {
   init () {
@@ -24,7 +27,7 @@ module.exports = class BudgetCockpitService extends cds.ApplicationService {
 
       // 2. Read the actuals from S/4HANA (mocked locally, real API on BTP)
       const s4 = await cds.connect.to('API_JOURNALENTRYITEMBASIC_SRV')
-      const rows = await s4.run(
+          const rows = await s4.run(
         SELECT.from(s4.entities.A_JournalEntryItemBasic)
           .columns('CompanyCode', 'LedgerFiscalYear', 'FiscalPeriod', 'CostCenter',
                    'GLAccount', 'GLAccountName',
@@ -35,6 +38,8 @@ module.exports = class BudgetCockpitService extends cds.ApplicationService {
             CompanyCode: { in: companyCodes },
             CostCenter: { in: costCenters }
           })
+          .and({ GLAccount: { '>=': EXPENSE_ACCOUNTS_FROM } })
+          .and({ GLAccount: { '<=': EXPENSE_ACCOUNTS_TO } })
       )
 
       // 3. Map S/4HANA fields to our model
