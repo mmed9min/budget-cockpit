@@ -1,15 +1,13 @@
 {
   "name": "budget-cockpit",
   "version": "1.0.0",
-  "description": "Welcome to your new CAP project.",
-  "main": "index.js",
+  "description": "Budget monitoring cockpit - SAP BTP extension for S/4HANA Finance (CO)",
+  "license": "MIT",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cds-serve",
+    "watch": "cds watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@cap-js/hana": "^3",
     "@sap-cloud-sdk/connectivity": "^4",
@@ -25,50 +23,31 @@
   },
   "cds": {
     "requires": {
-      "auth": {
-        "kind": "mocked",
-        "users": {
-          "controller": {
-            "password": "",
-            "roles": [
-              "BudgetController"
-            ]
-          },
-          "camille": {
-            "password": "",
-            "roles": [
-              "CostCenterOwner"
-            ]
-          },
-          "lucas": {
-            "password": "",
-            "roles": [
-              "CostCenterOwner"
-            ]
+      "[development]": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "controller": { "password": "", "roles": ["BudgetController"] },
+            "camille":    { "password": "", "roles": ["CostCenterOwner"] },
+            "lucas":      { "password": "", "roles": ["CostCenterOwner"] }
           }
         }
       },
+      "[production]": {
+        "auth": { "kind": "xsuaa" },
+        "db": { "kind": "hana" },
+        "destinations": true
+      },
       "API_JOURNALENTRYITEMBASIC_SRV": {
         "kind": "odata-v2",
-        "model": "srv/external/API_JOURNALENTRYITEMBASIC_SRV"
-      },
-      "[production]": {
-        "auth": {
-          "kind": "xsuaa"
+        "model": "srv/external/API_JOURNALENTRYITEMBASIC_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "S4HANA_FINANCE",
+            "path": "/sap/opu/odata/sap/API_JOURNALENTRYITEMBASIC_SRV"
+          }
         }
-      },
-      "destinations": true
-    }
-  },
-  "API_JOURNALENTRYITEMBASIC_SRV": {
-   "kind": "odata-v2",
-    "model": "srv/external/API_JOURNALENTRYITEMBASIC_SRV",
-    "[production]": {
-      "credentials": {
-        "destination": "S4HANA_FINANCE",
-        "path": "/sap/opu/odata/sap/API_JOURNALENTRYITEMBASIC_SRV"
       }
     }
   }
-  
 }

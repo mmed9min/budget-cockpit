@@ -20,3 +20,4 @@ mta_archives/
 .vscode/
 
 .deploy/app-router/resources/
+mta-op-*/
